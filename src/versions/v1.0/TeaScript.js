@@ -119,3 +119,7 @@ let fromHTML = (html, trim = true) => {
     return template.content.children[0];
 
 }
+
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = { TeaScript, TeaDate };
+}

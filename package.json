@@ -1,0 +1,22 @@
+{
+  "name": "teascript-js",
+  "version": "1.0.2",
+  "description": "Powerful javascript library with a lot of features that will help you write clean code",
+  "main": "./src/versions/v1.0/TeaScript.min.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LINQeee/TeaScript.git"
+  },
+  "author": "Adrian Vvedenskii",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LINQeee/TeaScript/issues"
+  },
+  "homepage": "https://github.com/LINQeee/TeaScript#readme"
+}
