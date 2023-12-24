@@ -6,4 +6,4 @@
 
 - NPM: install npm package [teascript-js](https://www.npmjs.com/package/teascript-js)
 
-- VANILLA: insert to head element https://linqeee.github.io/TeaScript/src/versions/v1.0/TeaScript.min.js
+- VANILLA: insert to head element https://linqeee.github.io/TeaScript/src/versions/latest/TeaScript.min.js
