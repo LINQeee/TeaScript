@@ -1,0 +1,115 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    border: none;
+    outline: none;
+    box-sizing: border-box;
+}
+
+body {
+    background: #171717;
+    font-family: 'Montserrat', sans-serif;
+    min-height: 100vh;
+}
+
+.shopPage {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    background: #171717;
+    gap: 20px;
+    padding: 30px;
+}
+
+.mainPage {
+    width: 100%;
+    min-height: 100vh;
+    background: #171717;
+    gap: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.mainPage h1 {
+    color: #fff;
+}
+
+.mainPage button {
+    width: 200px;
+    height: 32px;
+    border-radius: 5px;
+    border: 1px solid #fff;
+    background: transparent;
+    transition: all 0.15s ease;
+    cursor: pointer;
+    font-size: 16px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.mainPage button:hover {
+    background: #fff;
+    color: #171717;
+}
+
+.card {
+    width: 300px;
+    height: 300px;
+    border-radius: 10px;
+    padding: 10px;
+    background: #262626;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    transition: all 0.35s ease;
+    animation: 0.7s ease-in-out appears forwards;
+}
+
+.card img {
+    height: 70%;
+    border-radius: 10px;
+}
+
+.card h3 {
+    color: #f3f3f3;
+    font-size: 20px;
+}
+
+.card button {
+    width: 100%;
+    height: 32px;
+    border-radius: 5px;
+    border: 1px solid #f3f3f3;
+    background: transparent;
+    font-size: 18px;
+    font-weight: 400;
+    font-family: 'Montserrat', sans-serif;
+    color: #f3f3f3;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.card button:hover {
+    background: #f3f3f3;
+    color: #171717;
+}
+
+.card:hover {
+    box-shadow: 0 0 15px -3px rgba(255, 255, 255, 0.6);
+}
+
+@keyframes appears {
+    from {
+        scale: 1.05;
+        opacity: 0;
+    }
+    to {
+        scale: 1;
+        opacity: 1;
+    }
+}
