@@ -4,8 +4,9 @@ const MyNavigator = new TSNavigator({
 });
 
 document.addEventListener("DOMContentLoaded",  async () => {
-    const { result, error } = await TSQuery.request("https://jsonplaceholder.typicode.com/todos/1", TSQuery.METHOD.GET, {});
+    const { result, error, request } = await TSQuery.request("https://jsonplaceholder.typicode.com/todos/1", TSQuery.METHOD.GET);
 
     console.log(result);
     console.log(error);
+    console.log(request);
 })

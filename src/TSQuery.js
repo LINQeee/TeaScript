@@ -12,15 +12,16 @@ class TSQuery {
         PATCH: "PATCH"
     }
 
-    static request = (url, method, body, options) => new Promise(resolve => {
-        options = {...options, method: method, body: body};
-        let error = undefined;
-        let result = undefined;
-
-        fetch(url, options)
-            .then(response => result = response)
-            .catch(err => error = err);
-
-        resolve({result, error});
-    });
+    static request = async (url, method, options, body) => {
+        options = { ...options, method: method, body: body };
+        try {
+            const response = await fetch(url, options);
+            let result = response;
+            if (response.headers.get("Content-Type").includes("application/json")) result = await response.json();
+            return { result, request: response };
+        }
+        catch (err) {
+            return { error: err };
+        }
+    }
 }
