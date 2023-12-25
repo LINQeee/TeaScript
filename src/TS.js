@@ -83,6 +83,11 @@ class TS {
         }
         return false;
     };
+
+    static createInterval = (func, timeout, ...args) => {
+        func();
+        return setInterval(func, timeout, ...args);
+    }
 }
 
 class Template {

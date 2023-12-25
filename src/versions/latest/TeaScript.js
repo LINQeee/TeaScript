@@ -2,9 +2,9 @@ class TS {
 
     static templates = {};
 
-    static addTemplate = (template) => {
-        if (this.templates.hasOwnProperty(template.name)) return;
-        this.templates[template.name] = template;
+    static addTemplate = (name, func) => {
+        if (this.templates.hasOwnProperty(name)) return;
+        this.templates[name] = func;
     }
 
     static initializeTemplate = (name, ...args) => {
@@ -83,20 +83,16 @@ class TS {
         }
         return false;
     };
+
+    static createInterval = (func, timeout, ...args) => {
+        func();
+        return setInterval(func, timeout, ...args);
+    }
 }
 
-class TSNavigator {
-
-    paths = {};
-
-    constructor(initPaths) {
-        this.paths = initPaths;
-        document.body.appendChild(TS.initializeTemplate(initPaths[TS.param("page")]));
-    }
-
-    gotoPage(pageName) {
-        TS.qAll("body > :not(script)").forEach(el => el.remove());
-        document.body.appendChild(TS.initializeTemplate(this.paths[pageName]));
+class Template {
+    constructor(name, func) {
+        TS.addTemplate(name, func);
     }
 }
 
@@ -166,3 +162,187 @@ const convertTwoDigit = (value) => {
     if (+value < 10) value = "0" + value;
     return value;
 }
+
+class TSNavigator {
+
+    paths = {};
+
+    history = [];
+
+    constructor(initPaths) {
+        this.paths = initPaths;
+        const initialPageName = TS.param("page");
+        if (!initialPageName || !this.paths.hasOwnProperty(initialPageName)) {
+            document.body.appendChild(TS.initializeTemplate("SysError", "Page not found: 404"));
+            return;
+        }
+        document.body.appendChild(TS.initializeTemplate(initPaths[initialPageName]));
+        this.history.push(initialPageName);
+        console.log(this.history);
+    }
+
+    goToPage(pageName, saveHistory = true) {
+        TS.qAll("body > :not(script)").forEach(el => el.remove());
+        document.body.appendChild(TS.initializeTemplate(this.paths[pageName]));
+        if (saveHistory) this.history.push(pageName);
+    }
+
+    goBack(deleteHistory = true) {
+        if (deleteHistory && this.history.length > 1) this.history.pop();
+        let historyIndex;
+        if (this.history.length === 1) historyIndex = 0;
+        else if (deleteHistory) historyIndex = this.history.length - 1;
+        else historyIndex = this.history.length - 2;
+        this.goToPage(this.history[historyIndex], !deleteHistory);
+    }
+}
+
+class TSQuery {
+  static METHOD = {
+    GET: "GET",
+    HEAD: "HEAD",
+    POST: "POST",
+    PUT: "PUT",
+    DELETE: "DELETE",
+    CONNECT: "CONNECT",
+    OPTIONS: "OPTIONS",
+    TRACE: "TRACE",
+    PATCH: "PATCH",
+  };
+
+  static STATUS = {
+    ERROR: "ERROR",
+    SUCCESS: "SUCCESS",
+  };
+
+  constructor(middlewares) {
+    this.middlewares = [DefaultMiddleware];
+    if (middlewares) this.middlewares = [...this.middlewares, middlewares];
+  }
+
+  refetchRequest = async (
+    toSave,
+    refetchTimeInMs,
+    url,
+    method,
+    options,
+    body
+  ) => {
+    const updateValue = async () => {
+      const { result, error, status } = await this.send(
+        url,
+        method,
+        { ...options, cacheEnabled: false },
+        body
+      );
+      toSave.result = result;
+      toSave.error = error;
+      toSave.status = status;
+    };
+    const interval = TS.createInterval(updateValue, refetchTimeInMs);
+    const removeInterval = () => clearInterval(interval);
+    return removeInterval;
+  };
+
+  send = async (url, method, options, body) => {
+    const cacheEnabled = options.cacheEnabled;
+    options = {
+      ...options,
+      method: method,
+      body: body,
+      cacheEnabled: undefined,
+    };
+    let resultObj;
+    const reqAction = {
+      requestUrl: url,
+      request: this.send,
+      requestMethod: method,
+      requestBody: body,
+      requestOptions: options,
+    };
+
+    const cachedRequest = cacheEnabled
+      ? getRequestFromCache(url, method, options, body)
+      : false;
+    if (cachedRequest) resultObj = cachedRequest;
+    else resultObj = await this.fetch(url, options, reqAction);
+    this.callMiddlewares(reqAction);
+    if (cacheEnabled) cacheRequest(url, method, options, body, resultObj);
+    return resultObj;
+  };
+
+  fetch = async (url, options, reqAction) => {
+    const response = await fetch(url, options);
+    if (response.ok) {
+      reqAction.responseStatus = TSQuery.STATUS.SUCCESS;
+      return {
+        result: await this.convertResponseToData(response),
+        status: response.status,
+      };
+    } else {
+      reqAction.responseStatus = TSQuery.STATUS.ERROR;
+      reqAction.error = await this.convertResponseToData(response);
+      return {
+        error: await this.convertResponseToData(response),
+        status: response.status,
+      };
+    }
+  };
+
+  convertResponseToData = async (response) => {
+    if (response.headers.get("Content-Type").includes("application/json"))
+      return await response.json();
+    if (response.headers.get("Content-Type").includes("plain/text"))
+      return await response.text();
+  };
+
+  callMiddlewares = (action) => {
+    this.middlewares.forEach(
+      async (middleware) => await middleware.call(action)
+    );
+  };
+}
+
+class Middleware {
+  constructor(func) {
+    this.call = func;
+  }
+}
+
+const cacheRequest = async (url, method, options, body, resultObj) => {
+  const jsonRequest = JSON.stringify({
+    url,
+    options,
+    method,
+    body,
+  });
+  if (sessionStorage.getItem(jsonRequest)) return;
+  sessionStorage.setItem(jsonRequest, JSON.stringify(resultObj));
+};
+
+const getRequestFromCache = (url, method, options, body) => {
+  const jsonRequest = JSON.stringify({
+    url,
+    options,
+    method,
+    body,
+  });
+  return JSON.parse(sessionStorage.getItem(jsonRequest));
+};
+
+const DefaultMiddleware = new Middleware((action) => {
+  const requestTime = TSDate.formatDate(new Date(), "hh:mm:ss");
+  if (action.responseStatus === TSQuery.STATUS.SUCCESS)
+    console.log(
+      `${action.requestMethod} request: ${action.requestUrl} - ${requestTime}`
+    );
+  else
+    console.log(
+      `ERROR ${action.requestMethod} request: ${action.requestUrl} ${requestTime}`
+    );
+});
+
+
+new Template("SysError", (message) => {
+    return `<div style="min-height: 100vh; display: flex; align-items: center; justify-content: center; background: #171717; color: #fff; border-radius: 5px; font-size: 20px">${message}</div>`;
+});
