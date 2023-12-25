@@ -2,9 +2,9 @@ class TS {
 
     static templates = {};
 
-    static addTemplate = (template) => {
-        if (this.templates.hasOwnProperty(template.name)) return;
-        this.templates[template.name] = template;
+    static addTemplate = (name, func) => {
+        if (this.templates.hasOwnProperty(name)) return;
+        this.templates[name] = func;
     }
 
     static initializeTemplate = (name, ...args) => {
@@ -83,4 +83,10 @@ class TS {
         }
         return false;
     };
+}
+
+class Template {
+    constructor(name, func) {
+        TS.addTemplate(name, func);
+    }
 }
