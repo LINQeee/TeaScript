@@ -29,7 +29,7 @@ const formatHour = (date, value) => {
 const formatMonth = (date, value) => {
     value = TS.uniqueReplaceAll(value, "MMMM", date.toLocaleDateString("default", {month: "long"}))
     value = TS.uniqueReplaceAll(value, "MMM", date.toLocaleDateString("default", {month: "short"}));
-    value = TS.uniqueReplaceAll(value, "MM", convertTwoDigit(date.getMonth()));
+    value = TS.uniqueReplaceAll(value, "MM", convertTwoDigit(date.getMonth() + 1));
     value = TS.uniqueReplaceAll(value, "M", date.toLocaleDateString("default", {month: "numeric"}));
     return value;
 }

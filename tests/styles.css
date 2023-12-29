@@ -147,3 +147,14 @@ button, input, body {
     background-color: var(--text-color);
     color: var(--background-color);
 }
+
+.mainCard {
+    display: flex;
+    width: 100px;
+    height: 100px;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+    background: #fff;
+}
