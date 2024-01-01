@@ -1,16 +1,8 @@
-new Template("ShopPage", () => {
-    return `
-<div class="shopPage">
-    <button class="backButton" onClick="MainNavigator.goBack()">back</button>
-    ${TS.initializeHTMLTemplate("Card", "Iphone", "https://assets.stickpng.com/images/61d2f85b92b57c0004c64745.png")}
-    ${TS.initializeHTMLTemplate("Card", "Iphone", "https://assets.stickpng.com/images/61d2f85b92b57c0004c64745.png")}
-    ${TS.initializeHTMLTemplate("Card", "Iphone", "https://assets.stickpng.com/images/61d2f85b92b57c0004c64745.png")}
-    ${TS.initializeHTMLTemplate("Card", "Iphone", "https://assets.stickpng.com/images/61d2f85b92b57c0004c64745.png")}
-    ${TS.initializeHTMLTemplate("Card", "Iphone", "https://assets.stickpng.com/images/61d2f85b92b57c0004c64745.png")}
-    ${TS.initializeHTMLTemplate("Card", "Iphone", "https://assets.stickpng.com/images/61d2f85b92b57c0004c64745.png")}
-    ${TS.initializeHTMLTemplate("Card", "Iphone", "https://assets.stickpng.com/images/61d2f85b92b57c0004c64745.png")}
-    ${TS.initializeHTMLTemplate("Card", "Iphone", "https://assets.stickpng.com/images/61d2f85b92b57c0004c64745.png")}
-    ${TS.initializeHTMLTemplate("Card", "Iphone", "https://assets.stickpng.com/images/61d2f85b92b57c0004c64745.png")}
-    ${TS.initializeHTMLTemplate("Card", "Iphone", "https://assets.stickpng.com/images/61d2f85b92b57c0004c64745.png")}
-</div>`
+new Template("ShopPage", async (category) => {
+    let {result} = await new TSQuery().send("https://fakestoreapi.com/products", TSQuery.METHOD.GET, {cacheEnabled: true});
+    if (category) result = result.filter(product => product.category === category);
+    return `<div class="shopPage page">
+                ${TS.initializeHTMLTemplate('Header')}
+                ${result.map(product => TS.initializeHTMLTemplate("Card", product)).join("")}
+            </div>`;
 });

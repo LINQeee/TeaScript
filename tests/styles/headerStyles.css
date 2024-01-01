@@ -1,0 +1,39 @@
+.pageHeader {
+    display: flex;
+    height: 40px;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    z-index: 2;
+    background: var(--background-color);
+}
+
+.pageHeader button:first-child {
+    flex: 0.13;
+    aspect-ratio: 1/1;
+}
+
+.pageHeader button {
+    flex: 1;
+    cursor: pointer;
+    background: var(--background-color);
+    border: solid var(--secondary-text);
+    color: var(--text-color);
+    font-size: 16px;
+    transition: all 0.15s ease;
+    border-width: 0 1px 1px 1px;
+}
+
+.pageHeader button:hover {
+    border-color: transparent;
+    z-index: 3;
+    box-shadow: 0 0 10px 10px rgba(0, 0, 0, 0.2);
+}
+
+.pageHeader button:hover + button {
+    border-left-color: transparent;
+}
+
+.pageHeader button:has(+ button:hover) {
+    border-right-color: transparent;
+}

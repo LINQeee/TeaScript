@@ -1,0 +1,91 @@
+.card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: start;
+    padding: 10px;
+    background: var(--card-background);
+    border-radius: 16px;
+    border: 2px solid var(--card-border);
+    width: 200px;
+    height: 300px;
+    gap: 15px;
+    position: relative;
+    animation: var(--appear-animation);
+}
+
+.card > span {
+    color: var(--secondary-text);
+    align-self: end;
+}
+
+.card img {
+    object-fit: contain;
+    width: 100%;
+    height: 130px;
+}
+
+.card .info {
+    color: var(--text-color);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 40px;
+    align-self: start;
+    width: 100%;
+}
+
+.card .info span {
+    font-size: 20px;
+}
+
+.card .action {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    position: absolute;
+    bottom: 0;
+    padding: 10px;
+}
+
+.card .action span {
+    color: var(--text-color);
+    font-weight: 500;
+    font-size: 25px;
+}
+
+.card .action button {
+    background: var(--theme);
+    border-radius: 8px;
+    width: 35px;
+    aspect-ratio: 1/1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--card-background);
+    transition: all 0.15s ease;
+    cursor: pointer;
+    border: 2px solid transparent;
+}
+
+.card .action button:hover {
+    background: var(--card-background);
+    border-color: var(--theme);
+    color: var(--theme);
+}
+
+.card .action button i {
+    scale: 1.2;
+}
+
+@keyframes appears {
+    from {
+        opacity: 0;
+        scale: 1.1;
+    }
+    to {
+        opacity: 1;
+        scale: 1;
+    }
+}

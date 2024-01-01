@@ -7,13 +7,16 @@ class TS {
         this.templates[name] = func;
     }
 
-    static initializeTemplate = (name, ...args) => {
+    static initializeTemplate = async (name, ...args) => {
         if (!this.templates.hasOwnProperty(name)) throw new Error(`Template ${name} does not exist`);
-        return this.fromHTML(this.templates[name](...args));
+        return this.fromHTML(await this.templates[name](...args));
     }
 
     static initializeHTMLTemplate = (name, ...args) => {
-        return this.templates[name](...args);
+        let initialized = this.templates[name](...args);
+        if (TS.isPromise(initialized))
+            initialized.then(response => initialized = response);
+        return initialized;
     }
 
     static replace = (value, search, replacement, ignoreCase) => {
@@ -84,9 +87,39 @@ class TS {
         return false;
     };
 
+    static str = (str) => {
+        return JSON.stringify(str.replace(/'/g, "\"")).replace(/"/g, "'");
+    }
+
+    static obj = (object) => {
+        object = this.removeQuotes(object);
+        return JSON.stringify(object).replace(/"/g, "'");
+    }
+
+    static removeQuotes = (object) => {
+        const result = {};
+        Object.keys(object).forEach(key => {
+            const value = object[key];
+            let escapedValue = value;
+
+            if (typeof value === 'object') {
+                escapedValue = this.removeQuotes(value);
+            } else if (typeof value === 'string') {
+                escapedValue = value.replace(/'/g, "\"");
+            }
+
+            result[key] = escapedValue;
+        });
+        return result;
+    }
+
     static createInterval = (func, timeout, ...args) => {
         func();
         return setInterval(func, timeout, ...args);
+    }
+
+    static isPromise = (p) => {
+        return p && Object.prototype.toString.call(p) === "[object Promise]";
     }
 }
 

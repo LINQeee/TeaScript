@@ -1,0 +1,41 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+:root {
+    --background-color: #fff;
+    --text-color: #363842;
+    --secondary-text: #81859C;
+    --appear-animation: 0.7s ease-in-out appears forwards;
+    --card-background: #fff;
+    --card-border: #D8D9E0;
+    --theme: #2667FF;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    border: none;
+    outline: none;
+    box-sizing: border-box;
+}
+
+body {
+    background: var(--background-color);
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+button, input, body {
+    font-family: "Montserrat", sans-serif;
+}
+
+.shopPage {
+    gap: 20px;
+    padding: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.page {
+    padding-top: 80px;
+}

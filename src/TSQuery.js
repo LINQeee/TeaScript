@@ -41,8 +41,7 @@ class TSQuery {
             toSave.status = status;
         };
         const interval = TS.createInterval(updateValue, refetchTimeInMs);
-        const removeInterval = () => clearInterval(interval);
-        return removeInterval;
+        return () => clearInterval(interval);
     };
 
     send = async (url, method, options, body) => {
@@ -66,8 +65,10 @@ class TSQuery {
             ? getRequestFromCache(url, method, options, body)
             : false;
         if (cachedRequest) resultObj = cachedRequest;
-        else resultObj = await this.fetch(url, options, reqAction);
-        this.callMiddlewares(reqAction);
+        else {
+            resultObj = await this.fetch(url, options, reqAction);
+            this.callMiddlewares(reqAction);
+        }
         if (cacheEnabled) await cacheRequest(url, method, options, body, resultObj);
         return resultObj;
     };
