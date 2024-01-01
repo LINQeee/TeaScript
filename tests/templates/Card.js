@@ -8,7 +8,7 @@ new Template("Card", (product) => {
             </div>
             <div class="action">
                 <span>${product.price}$</span>
-                <button onclick="MainNavigator.goToPage('product',true,${TS.obj(product)})"><i class="fa-regular fa-cart-shopping"></i></button>
+                <button onclick="MainNavigator.goToPage('product',true,${TS.obj(product)})"><i class="fa-solid fa-cart-shopping"></i></button>
             </div>
             </div>`;
 });
