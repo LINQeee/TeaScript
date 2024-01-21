@@ -71,6 +71,11 @@ class TS {
         return document.querySelectorAll(selector);
     }
 
+    static readJSON = async (path) => {
+        const fetchResult = await fetch(path);
+        return await fetchResult.json();
+    }
+
     static param = function getUrlParameter(sParam) {
         let sPageURL = window.location.search.substring(1),
             sURLVariables = sPageURL.split('&'),

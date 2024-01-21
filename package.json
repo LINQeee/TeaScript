@@ -4,7 +4,7 @@
   "description": "Powerful javascript library with a lot of features that will help you write clean code",
   "main": "src/versions/latest/TeaScript.min.js",
   "directories": {
-    "test": "tests"
+    "test": "examples"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
