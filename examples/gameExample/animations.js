@@ -65,5 +65,5 @@ const jumpSpriteAnimation = {
     name: "jumpSpriteAnimation",
     spriteFramesCount: 5,
     cropPosStep: new Vector2(32, 0),
-    duration: 75,
+    duration: 65,
 }

@@ -1,5 +1,5 @@
 const getNestedProp = (o, s) => {
-    s = s.replace(/\[(\w+)\]/g, '.$1');
+    s = s.replace(/\[(\w+)]/g, '.$1');
     s = s.replace(/^\./, '');
     let a = s.split('.');
     for (let i = 0, n = a.length; i < n; ++i) {
@@ -45,6 +45,8 @@ const Color = {
     WHITE: {r: 255, g: 255, b: 255, a: 255},
     BLACK: {r: 0, g: 0, b: 0, a: 255},
     TRANSPARENT: {r: 0, g: 0, b: 0, a: 0},
+    HALF_TRANSPARENT_BLACK: {r: 0, g: 0, b: 0, a: 0.5},
+    HALF_TRANSPARENT_WHITE: {r: 255, g: 255, b: 255, a: 0.5},
 }
 
 const Key = {

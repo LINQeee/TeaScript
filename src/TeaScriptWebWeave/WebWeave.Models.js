@@ -8,6 +8,8 @@ class SceneObject {
         this.scale = scale;
         this.getLayer = () => WW.layers[layer];
         if (this.settings.isCollider) this.triggers = [];
+        if (!this.settings.imagePosOffset) this.settings.imagePosOffset = new Vector2(0, 0);
+        if (!this.settings.imageSizeOffset) this.settings.imageSizeOffset = new Vector2(0, 0);
         this.position = position || WWCore.getScreenCenter(this.getLayer());
     }
 
@@ -75,6 +77,11 @@ class Vector2 {
     plus = (vector) => {
         this.x += vector.x;
         this.y += vector.y;
+    }
+
+    multiply = (vector) => {
+        this.x *= vector.x;
+        this.y *= vector.y;
     }
 
     set = (vector) => {

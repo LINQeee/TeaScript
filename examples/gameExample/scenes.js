@@ -20,13 +20,25 @@ const MainScene = () => {
                     isStatic: true,
                     hasCollision: true,
                     shouldMove: true,
-                    useGravity: true
+                    useGravity: true,
+                    mass: 35
                 },
                 WW.T.RECTANGLE,
                 "player"
             ),
-            ...generateGrounds()
-
+            ...generateGrounds(),
+            new SceneObject(
+                new Vector2(600, 1300),
+                new Vector2(150, 150),
+                Color.HALF_TRANSPARENT_BLACK,
+                "collision",
+                undefined,
+                {
+                    hasCollision: true
+                },
+                WW.T.RECTANGLE,
+                "background"
+            )
         ]
     }
 }
@@ -36,14 +48,16 @@ const generateGrounds = () => {
     let groundOffset = 0;
     for (let i = 0; i < 10; i++) {
         ground.push(new SceneObject(
-            new Vector2(-100 + groundOffset, WW.layers["background"].canvas.height - 200),
-            new Vector2(786, 384),
+            new Vector2(-100 + groundOffset, WW.layers["background"].canvas.height - 130),
+            new Vector2(586, 384),
             undefined,
-            `ground${Math.random()}`,
+            `ground${i}`,
             undefined,
             {
                 spriteUrl: "./assets/ground.png",
-                hasCollision: true
+                hasCollision: true,
+                imagePosOffset: new Vector2(-60, -100),
+                imageSizeOffset: new Vector2(180, 0)
             },
             WW.T.RECTANGLE,
             "background"

@@ -10,7 +10,11 @@ class WW {
     static layers = [];
     static sceneObjects = [];
     static currentAnimations = [];
-    static cameraPosition;
+    static camera = {
+        cameraPosition: new Vector2(0, 0),
+        initialPosition: new Vector2(0, 0),
+        followingObjectId: null
+    };
     static T = {
         RECTANGLE: "rectangle",
         CIRCLE: "circle"
@@ -20,12 +24,32 @@ class WW {
         SPRITE_ANIM: "sprite_anim"
     }
 
+    static startFollowCamera = (object, offset = new Vector2(0, 0)) => {
+        this.camera.followingObjectId = object.id;
+        let newCamPos = new Vector2(object.position.x, object.position.y);
+        newCamPos.plus(offset);
+        this.camera.initialPosition.set(newCamPos);
+        this.addUpdateListener(object.id, () => this.camera.cameraPosition.set(object.position));
+    }
+
+    static stopFollowCamera = () => {
+        this.camera.initialPosition = new Vector2(0, 0);
+        this.removeUpdateListener(this.camera.followingObjectId);
+    }
+
+    static addUpdateListener = (listenerName, func) => {
+        this.onUpdate.push({id: listenerName, event: func});
+    }
+
+    static removeUpdateListener = (listenerName) => {
+        this.onUpdate = this.onUpdate.filter(listener => listener.id !== listenerName);
+    }
+
     static startEngine = (onEngineStart = () => {
     }) => {
         this.layers["background"] = new Layer("background", 0);
         this.layers["player"] = new Layer("player", 1);
         this.layers["FX"] = new Layer("FX", 2);
-        this.cameraPosition = new Vector2(0, 0);
         this.#updateSceneSize();
         window.addEventListener('resize', this.#updateSceneSize);
         WWCore.setupKeyboard();
@@ -37,7 +61,7 @@ class WW {
         WWCore.clearLayers();
         this.sceneObjects.forEach(object => this.#updateObject(object));
         this.#updateAnimations();
-        this.onUpdate();
+        this.onUpdate.forEach(listener => listener.event());
     }
 
     static loadScene = (scene) => {
@@ -49,8 +73,7 @@ class WW {
         if (scene.objects && scene.objects.length) scene.objects.forEach(obj => this.initObject(obj))
     }
 
-    static onUpdate = () => {
-    };
+    static onUpdate = [];
 
     static #updateAnimations = () => {
         this.currentAnimations.forEach(animObj => {
@@ -67,8 +90,8 @@ class WW {
 
     static #updateObject = (object) => {
         if (object.settings.isCollider) this.#checkIfCollides(object);
-        if (object.settings.hasCollision && object.settings.shouldMove && object.triggers && object.triggers.length) WWCore.calculateCollision(object);
         if (object.settings.useGravity) WWCore.calculateGravity(object);
+        if (object.settings.hasCollision && object.settings.shouldMove && object.triggers && object.triggers.length) WWCore.calculateCollision(object);
         this.initObject(object);
     }
 
@@ -101,8 +124,8 @@ class WW {
     static initObject = (sceneObject) => {
         WWCore.startDrawing(sceneObject);
 
-        let objectPos = WWCore.generateObjectPosition(sceneObject);
         let objectSize = WWCore.generateObjectSize(sceneObject);
+        let objectPos = WWCore.generateObjectPosition(sceneObject);
 
         WWCore.generateShape(sceneObject, sceneObject.type, objectPos, objectSize);
         WWCore.fillColor(sceneObject, objectPos);
