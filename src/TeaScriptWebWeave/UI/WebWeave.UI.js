@@ -1,5 +1,5 @@
 class WWUI {
-  static createPadButton = (position, buttonStyle, rotation) => {
+  static createPadButton = (position, buttonStyle, rotation, objectToUpdate, buttonName) => {
     let isButtonActive = false;
     const button = document.createElement("button");
     button.classList.add("padButton");
@@ -8,8 +8,8 @@ class WWUI {
     button.style.top = `${position.y}px`;
     button.style.width = `${buttonStyle.size.x}px`;
     button.style.height = `${buttonStyle.size.y}px`;
-    button.addEventListener("touchstart", () => (isButtonActive = true));
-    button.addEventListener("touchend", () => (isButtonActive = false));
+    button.addEventListener("touchstart", () => (objectToUpdate[buttonName] = true));
+    button.addEventListener("touchend", () => (objectToUpdate[buttonName] = false));
     button.addEventListener("touchstart", () => (button.style.opacity = 0.5));
     button.addEventListener("touchend", () => (button.style.opacity = 1));
     button.style.backgroundColor = colorToString(buttonStyle.backgroundColor);
@@ -19,7 +19,6 @@ class WWUI {
       button.appendChild(image);
     }
     document.body.appendChild(button);
-    return isButtonActive;
   };
 }
 

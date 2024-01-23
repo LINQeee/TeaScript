@@ -64,6 +64,52 @@ class Layer {
     }
 }
 
+class ResponsiveVector2 {
+
+    static T = {
+        DEFAULT: "default",
+        VALUES_FROM_END: "values_from_end",
+        Y_FROM_END: "y_from_end",
+        X_FROM_END: "x_from_end"
+    }
+
+    static Mode = {
+        PERCENT: "percent",
+        DEFAULT: "default"
+    }
+
+    constructor(responsiveX, responsiveY, type = ResponsiveVector2.T.DEFAULT, mode = ResponsiveVector2.Mode.DEFAULT) {
+        this.mode = mode;
+        this.type = type;
+        this.responsiveX = responsiveX;
+        this.responsiveY = responsiveY;
+        this.x = this.#calculateVector().x;
+        this.y = this.#calculateVector().y;
+    }
+
+    #calculateVector = () => {
+        const screenWidth = WW.layers["background"].canvas.width;
+        const screenHeight = WW.layers["background"].canvas.height;
+        const x = this.mode === ResponsiveVector2.Mode.DEFAULT ? this.responsiveX : this.responsiveX / 100 * screenWidth;
+        const y = this.mode === ResponsiveVector2.Mode.DEFAULT ? this.responsiveY : this.responsiveY / 100 * screenHeight;
+        switch (this.type) {
+            case ResponsiveVector2.T.DEFAULT:
+                return new Vector2(x, y);
+            break;
+            case ResponsiveVector2.T.VALUES_FROM_END:
+                return new Vector2(screenWidth - x, screenHeight - y);
+                break;
+            case ResponsiveVector2.T.X_FROM_END:
+                return new Vector2(screenWidth - x, y);
+                break;
+            case ResponsiveVector2.T.Y_FROM_END:
+                return new Vector2(x, screenHeight - y);
+                break;
+        }
+
+    }
+}
+
 class Vector2 {
     constructor(x, y) {
         this.x = x;

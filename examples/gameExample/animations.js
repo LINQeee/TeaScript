@@ -52,7 +52,7 @@ const bombExplode = (pesnya) => {
 };
 
 const walkSpriteAnimation = {
-  initialCropPos: new Vector2(5, 36),
+  initialCropPos: new Vector2(5, 34),
   yCropOffset: 36,
   name: "walkSpriteAnimation",
   spriteFramesCount: 7,
@@ -60,7 +60,7 @@ const walkSpriteAnimation = {
   duration: 56,
 };
 const jumpSpriteAnimation = {
-  initialCropPos: new Vector2(5, 36),
+  initialCropPos: new Vector2(5, 34),
   yCropOffset: 165,
   name: "jumpSpriteAnimation",
   spriteFramesCount: 5,
@@ -68,7 +68,7 @@ const jumpSpriteAnimation = {
   duration: 65,
 };
 const hitSpriteAnimation = {
-  initialCropPos: new Vector2(5, 36),
+  initialCropPos: new Vector2(5, 34),
   yCropOffset: 134,
   name: "hitSpriteAnimation",
   spriteFramesCount: 9,

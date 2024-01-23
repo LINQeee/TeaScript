@@ -9,28 +9,26 @@ const MainScene = () => {
       new SceneObject(
         new Vector2(WW.layers["background"].canvas.width / 2, groundLevel()),
         new Vector2(150, 150),
-        Color.TRANSPARENT,
+        Color.HALF_TRANSPARENT_BLACK,
         "player",
         undefined,
         {
           cropSize: new Vector2(27, 27),
-          cropPos: new Vector2(5, 36),
+          cropPos: new Vector2(5, 34),
           isCollider: true,
           spriteUrl: "./assets/character.png",
           isStatic: true,
           hasCollision: true,
           shouldMove: true,
           useGravity: true,
-          mass: 35,
+          mass: 45,
         },
         WW.T.RECTANGLE,
         "player"
       ),
       ...generateGrounds(),
       new SceneObject(
-        WWCore.getScreenCenter(WW.layers["background"]).plus(
-          new Vector2(100, 1300)
-        ),
+          new ResponsiveVector2(800, 350, ResponsiveVector2.T.Y_FROM_END),
         new Vector2(150, 150),
         Color.BLACK,
         "collision",
